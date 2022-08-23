@@ -5,39 +5,39 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import java.util.List;
 
-public class PageTestResult extends AbstractPage{
+public class TestResultPage extends AbstractPage{
     private Boolean result;
 
-    public PageTestResult(WebDriver driver) {
+    public TestResultPage(WebDriver driver) {
         super(driver);
     }
 
     public Boolean checkVMClass() {
-        String classType = PageNavigator.getFormClassType();
+        String classType = GoogleCloudPlatformPricingCalculatorPage.getFormClassType();
         checkResult(classType);
         return result;
     }
 
     public Boolean checkInstanceType() {
-        String instanceType=PageNavigator.getFormInstanceType();
+        String instanceType= GoogleCloudPlatformPricingCalculatorPage.getFormInstanceType();
         checkResult(instanceType.substring(0,instanceType.indexOf(' ')));
         return result;
     }
 
     public Boolean checkRegion() {
-        String region=PageNavigator.getFormLocation();
+        String region= GoogleCloudPlatformPricingCalculatorPage.getFormLocation();
         checkResult(region.substring(0,region.indexOf(' ')));
         return result;
     }
 
     public Boolean checkSSD() {
-        String ssd=PageNavigator.getFormSsdCapacity();
+        String ssd= GoogleCloudPlatformPricingCalculatorPage.getFormSsdCapacity();
         checkResult(ssd.substring(0,ssd.indexOf(' ')));
         return result;
     }
 
     public Boolean checkUsage() {
-        checkResult(PageNavigator.getFormUsage());
+        checkResult(GoogleCloudPlatformPricingCalculatorPage.getFormUsage());
         return result;
     }
 
@@ -57,7 +57,6 @@ public class PageTestResult extends AbstractPage{
             }
         }
         result = false;
-        return;
     }
 
     public Boolean checkManualResult(){

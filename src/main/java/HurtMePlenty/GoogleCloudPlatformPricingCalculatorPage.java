@@ -1,14 +1,13 @@
 package HurtMePlenty;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 
-public class PageNavigator extends AbstractPage {
+public class GoogleCloudPlatformPricingCalculatorPage extends AbstractPage {
     private static final String HOMEPAGE_URL = "https://cloud.google.com/";
     private static final String SEARCH_REQUEST = "Google Cloud Platform Pricing Calculator";
     private static final String FORM_NUMBER_OF_INSTANCE = "4";
@@ -35,7 +34,7 @@ public class PageNavigator extends AbstractPage {
     private WebElement buttonAddToEstimate;
 
 
-    public PageNavigator(WebDriver driver) {
+    public GoogleCloudPlatformPricingCalculatorPage(WebDriver driver) {
         super(driver);
     }
 
@@ -59,13 +58,13 @@ public class PageNavigator extends AbstractPage {
         return FORM_USAGE;
     }
 
-    public PageNavigator openPage() {
+    public GoogleCloudPlatformPricingCalculatorPage openPage() {
         driver.manage().window().maximize();
         driver.get(HOMEPAGE_URL);
         return this;
     }
 
-    public PageNavigator searchForCalculatorSiteAndClick() {
+    public GoogleCloudPlatformPricingCalculatorPage searchForCalculatorSiteAndClick() {
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(searchButton));
         searchButton.click();
         searchButton.sendKeys(SEARCH_REQUEST);
@@ -75,7 +74,7 @@ public class PageNavigator extends AbstractPage {
         return this;
     }
 
-    public PageNavigator fillCalculatorSiteForm() {
+    public GoogleCloudPlatformPricingCalculatorPage fillCalculatorSiteForm() {
         driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='cloud-site']/devsite-iframe/iframe")));
         driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@id='myFrame']")));
         inputFieldHandling(inputFieldNumberOfInstances, FORM_NUMBER_OF_INSTANCE);

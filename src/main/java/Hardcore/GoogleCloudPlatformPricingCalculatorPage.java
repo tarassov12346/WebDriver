@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 
-public class PageNavigator extends AbstractPage {
+public class GoogleCloudPlatformPricingCalculatorPage extends AbstractPage {
     private static final String HOMEPAGE_URL = "https://cloud.google.com/";
     private static final String SEARCH_REQUEST = "Google Cloud Platform Pricing Calculator";
     private static final String EMAIL_GENERATOR_URL = "https://yopmail.com/";
@@ -24,7 +24,7 @@ public class PageNavigator extends AbstractPage {
 
     String generatedEmailName;
     ArrayList<String> windowsTabsList;
-    String estimatedCostOnCalculator;
+    static String estimatedCostOnCalculator;
 
     @FindBy(xpath = "//*[@class='devsite-search-field devsite-search-query']")
     private WebElement searchButton;
@@ -54,23 +54,23 @@ public class PageNavigator extends AbstractPage {
     @FindBy(xpath = "//*[@id='nbmail']")
     private WebElement mail;
 
-    public PageNavigator(WebDriver driver) {
+    public GoogleCloudPlatformPricingCalculatorPage(WebDriver driver) {
         super(driver);
     }
 
-    public PageNavigator(WebDriver driver, String generatedEmailName, ArrayList<String> windowsTabsList) {
+    public GoogleCloudPlatformPricingCalculatorPage(WebDriver driver, String generatedEmailName, ArrayList<String> windowsTabsList) {
         super(driver);
         this.generatedEmailName = generatedEmailName;
         this.windowsTabsList = windowsTabsList;
     }
 
-    public PageNavigator openPage() {
+    public GoogleCloudPlatformPricingCalculatorPage openPage() {
         driver.manage().window().maximize();
         driver.get(HOMEPAGE_URL);
         return this;
     }
 
-    public PageNavigator searchForCalculatorSiteAndClick() {
+    public GoogleCloudPlatformPricingCalculatorPage searchForCalculatorSiteAndClick() {
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(searchButton));
         searchButton.click();
         searchButton.sendKeys(SEARCH_REQUEST);
@@ -80,7 +80,7 @@ public class PageNavigator extends AbstractPage {
         return this;
     }
 
-    public PageNavigator fillCalculatorSiteForm() {
+    public GoogleCloudPlatformPricingCalculatorPage fillCalculatorSiteForm() {
         driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='cloud-site']/devsite-iframe/iframe")));
         driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@id='myFrame']")));
         inputFieldHandling(inputFieldNumberOfInstances, FORM_NUMBER_OF_INSTANCE);
@@ -125,12 +125,12 @@ public class PageNavigator extends AbstractPage {
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(200));
     }
 
-    public EmailPageNavigator createEstimatedCostRequest() {
+    public EmailHandlingPage createEstimatedCostRequest() {
         buttonAddToEstimate.click();
-        return new EmailPageNavigator(driver, EMAIL_GENERATOR_URL);
+        return new EmailHandlingPage(driver, EMAIL_GENERATOR_URL);
     }
 
-    public EmailPageNavigator sendEmail() {
+    public EmailHandlingPage sendEmail() {
        // driver.switchTo().frame(driver.findElement(By.xpath("/html/body/section/section/main/devsite-content/article/div[2]/article/devsite-iframe/iframe")));
         driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='cloud-site']/devsite-iframe/iframe")));
         //       driver.switchTo().frame(driver.findElement(By.xpath("/html/body/div/div/div/iframe")));
@@ -146,7 +146,7 @@ public class PageNavigator extends AbstractPage {
         while (mail.getText().equals("0 mail")) {
             refreshEmailWindowButton.click();
         }
-        return new EmailPageNavigator(driver, estimatedCostOnCalculator, generatedEmailName);
+        return new EmailHandlingPage(driver,generatedEmailName);
     }
 
     private String getCostFromText(String text) {

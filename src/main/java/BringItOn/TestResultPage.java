@@ -7,7 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
-public class PageTestResult extends AbstractPage{
+public class TestResultPage extends AbstractPage{
     private Boolean result;
 
     @FindBy(xpath = "//*[@class='textarea -raw js-paste-raw']")
@@ -17,25 +17,25 @@ public class PageTestResult extends AbstractPage{
     @FindBy(xpath = "//div[@class='info-top']/h1")
     private WebElement titleText;
 
-    public PageTestResult(WebDriver driver) {
+    public TestResultPage(WebDriver driver) {
         super(driver);
     }
 
     public Boolean checkCodeText() {
         new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(codeText));
-        checkResult(codeText.getAttribute("value"), PageNavigator.getCodeFieldText());
+        checkResult(codeText.getAttribute("value"), PastebinPage.getCodeFieldText());
         return result;
     }
 
     public Boolean checkSyntaxHighlight() {
         new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(syntaxHighlight));
-        checkResult(syntaxHighlight.getText(), PageNavigator.getSYNTAX());
+        checkResult(syntaxHighlight.getText(), PastebinPage.getSYNTAX());
         return result;
     }
 
     public Boolean checkTitle() {
         new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(titleText));
-        checkResult(titleText.getText(), PageNavigator.getTitleText());
+        checkResult(titleText.getText(), PastebinPage.getTitleText());
         return result;
     }
 

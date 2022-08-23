@@ -6,12 +6,12 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
-public class WebDriverTest {
+public class WebDriverHurtMePlentyTest {
     WebDriver chromeDriver= StartScenarioOnBrowser(new ChromeDriver());
-    PageTestResult testPage = new PageTestResult(chromeDriver);
+    TestResultPage testPage = new TestResultPage(chromeDriver);
 
     private static WebDriver StartScenarioOnBrowser(WebDriver driver) {
-        new PageNavigator(driver)
+        new GoogleCloudPlatformPricingCalculatorPage(driver)
                 .openPage()
                 .searchForCalculatorSiteAndClick()
                 .fillCalculatorSiteForm()
