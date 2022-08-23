@@ -1,4 +1,4 @@
-package BringItOn;
+package ICanWin;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,21 +7,14 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
-public class PageNavigator extends AbstractPage{
+public class PastebinPage extends AbstractPage{
     private static final String HOMEPAGE_URL = "https://pastebin.com";
-    private static final String CODE_FIELD_TEXT = "git config --global user.name  \"New Sheriff in Town\"\n" +
-            "git reset $(git commit-tree HEAD^{tree} -m \"Legacy code\")\n" +
-            "git push origin master --force";
+    private static final String CODE_FIELD_TEXT = "Hello from WebDriver";
     private static final String EXPIRATION_TIME = "10 Minutes";
-    private static final String SYNTAX = "Bash";
-    private static final String TITLE_TEXT = "how to gain dominance among developers";
+    private static final String TITLE_TEXT = "helloweb";
 
     @FindBy(xpath = "//*[@id='postform-text']")
     private WebElement codeDescriptionField;
-    @FindBy(xpath = "//*[@id='select2-postform-format-container']")
-    private WebElement syntaxHighlightComboBox;
-    @FindBy(xpath = "//*[@class='select2-results__option' and text()='" + SYNTAX + "']")
-    private WebElement syntaxHighlightComboBoxSelect;
     @FindBy(xpath = "//*[@id='select2-postform-expiration-container']")
     private WebElement pasteExpirationField;
     @FindBy(xpath = "//*[@class='select2-results__option' and text()='" + EXPIRATION_TIME + "']")
@@ -31,36 +24,20 @@ public class PageNavigator extends AbstractPage{
     @FindBy(xpath = "//*[@class='btn -big']")
     private WebElement createButton;
 
-    public PageNavigator(WebDriver driver) {
+    public PastebinPage(WebDriver driver) {
         super(driver);
     }
 
-    public static String getCodeFieldText() {
-        return CODE_FIELD_TEXT;
-    }
-
-    public static String getSYNTAX() {
-        return SYNTAX;
-    }
-
-    public static String getTitleText() {
-        return TITLE_TEXT;
-    }
-
-    public PageNavigator openPage() {
+    public PastebinPage openPage() {
         driver.manage().window().maximize();
         driver.get(HOMEPAGE_URL);
         return this;
     }
 
-    public PageNavigator fillSiteForm() {
+    public PastebinPage fillSiteForm() {
         codeDescriptionField.sendKeys(CODE_FIELD_TEXT);
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(syntaxHighlightComboBox));
-              syntaxHighlightComboBox.click();
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(syntaxHighlightComboBoxSelect));
-               syntaxHighlightComboBoxSelect.click();
         new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(pasteExpirationField));
-               pasteExpirationField.click();
+        pasteExpirationField.click();
         new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(pasteExpirationFieldSelect));
         pasteExpirationFieldSelect.click();
         new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(titleField));
@@ -68,7 +45,7 @@ public class PageNavigator extends AbstractPage{
         return this;
     }
 
-    public PageNavigator createRequest() {
+    public PastebinPage createPaste() {
         createButton.click();
         System.out.println("URL: " + driver.getCurrentUrl());
         return this;

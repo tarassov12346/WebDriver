@@ -2,20 +2,17 @@ package Hardcore;
 
 import org.openqa.selenium.WebDriver;
 
-public class PageTestResult extends AbstractPage{
-    public static Boolean result;
+public class TestResultPage extends AbstractPage {
     private String estimatedCostOnCalculator;
     private String costValueFromEmail;
 
-    public PageTestResult(WebDriver driver, String estimatedCostOnCalculator, String costValueFromEmail) {
+    public TestResultPage(WebDriver driver, String estimatedCostOnCalculator, String costValueFromEmail) {
         super(driver);
         this.estimatedCostOnCalculator = estimatedCostOnCalculator;
         this.costValueFromEmail = costValueFromEmail;
-        result = checkEmail();
-        System.out.println("final result: " + result);
     }
 
-    public boolean checkEmail() {
+    public boolean compareEstimatedCostOnCalculatorWithCostValueFromEmail() {
         System.out.println("Start to check the results!");
         System.out.println("estimatedCostOnCalculator: " + estimatedCostOnCalculator);
         System.out.println("costValueFromEmail: " + costValueFromEmail);

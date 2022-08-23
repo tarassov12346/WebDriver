@@ -1,16 +1,15 @@
-package Hardcore;
+package HurtMePlenty;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.ArrayList;
 
-public class PageNavigator extends AbstractPage {
+
+public class GoogleCloudPlatformPricingCalculatorPage extends AbstractPage {
     private static final String HOMEPAGE_URL = "https://cloud.google.com/";
     private static final String SEARCH_REQUEST = "Google Cloud Platform Pricing Calculator";
-    private static final String EMAIL_GENERATOR_URL = "https://yopmail.com/";
     private static final String FORM_NUMBER_OF_INSTANCE = "4";
     private static final String FORM_OS_TYPE = "Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)";
     private static final String FORM_CLASS_TYPE = "Regular";
@@ -21,10 +20,6 @@ public class PageNavigator extends AbstractPage {
     private static final String FORM_SSD_CAPACITY = "2x375 GB";
     private static final String FORM_LOCATION = "Frankfurt (europe-west3)";
     private static final String FORM_USAGE = "1 Year";
-
-    String generatedEmailName;
-    ArrayList<String> windowsTabsList;
-    String estimatedCostOnCalculator;
 
     @FindBy(xpath = "//*[@class='devsite-search-field devsite-search-query']")
     private WebElement searchButton;
@@ -37,40 +32,39 @@ public class PageNavigator extends AbstractPage {
     private WebElement checkBoxAddGPUs;
     @FindBy(xpath = "//*[@ng-click='listingCtrl.addComputeServer(ComputeEngineForm);']")
     private WebElement buttonAddToEstimate;
-    //@FindBy(xpath = "//*[@id='compute']/md-list[1]/md-list-item[8]/div[1]")
-    @FindBy(xpath = "//b[@class='ng-binding']")
-    private WebElement costTextOnCalculator;
-    @FindBy(xpath = "//*[@id='email_quote']")
-    private WebElement buttonEmailEstimate;
-    @FindBy(xpath = "//input[@type='email']")
-    private WebElement inputFieldEmail;
-    @FindBy(xpath = "//button[@aria-label='Send Email']")
-    private WebElement buttonSendEmail;
-    // @FindBy(xpath = "/html/body/div/div[2]/main/div/div[2]/div/div/div[2]/button[2]/span")
-    @FindBy(xpath = "//span[text()='Проверить почту']")
-    private WebElement checkEmailButton;
-    @FindBy(xpath = "//*[@id='refresh']")
-    private WebElement refreshEmailWindowButton;
-    @FindBy(xpath = "//*[@id='nbmail']")
-    private WebElement mail;
 
-    public PageNavigator(WebDriver driver) {
+
+    public GoogleCloudPlatformPricingCalculatorPage(WebDriver driver) {
         super(driver);
     }
 
-    public PageNavigator(WebDriver driver, String generatedEmailName, ArrayList<String> windowsTabsList) {
-        super(driver);
-        this.generatedEmailName = generatedEmailName;
-        this.windowsTabsList = windowsTabsList;
+    public static String getFormClassType() {
+        return FORM_CLASS_TYPE;
     }
 
-    public PageNavigator openPage() {
+    public static String getFormInstanceType() {
+        return FORM_INSTANCE_TYPE;
+    }
+
+    public static String getFormSsdCapacity() {
+        return FORM_SSD_CAPACITY;
+    }
+
+    public static String getFormLocation() {
+        return FORM_LOCATION;
+    }
+
+    public static String getFormUsage() {
+        return FORM_USAGE;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage openPage() {
         driver.manage().window().maximize();
         driver.get(HOMEPAGE_URL);
         return this;
     }
 
-    public PageNavigator searchForCalculatorSiteAndClick() {
+    public GoogleCloudPlatformPricingCalculatorPage searchForCalculatorSiteAndClick() {
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(searchButton));
         searchButton.click();
         searchButton.sendKeys(SEARCH_REQUEST);
@@ -80,7 +74,7 @@ public class PageNavigator extends AbstractPage {
         return this;
     }
 
-    public PageNavigator fillCalculatorSiteForm() {
+    public GoogleCloudPlatformPricingCalculatorPage fillCalculatorSiteForm() {
         driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='cloud-site']/devsite-iframe/iframe")));
         driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@id='myFrame']")));
         inputFieldHandling(inputFieldNumberOfInstances, FORM_NUMBER_OF_INSTANCE);
@@ -125,32 +119,7 @@ public class PageNavigator extends AbstractPage {
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(200));
     }
 
-    public EmailPageNavigator createEstimatedCostRequest() {
+    public void createEstimatedCostRequest() {
         buttonAddToEstimate.click();
-        return new EmailPageNavigator(driver, EMAIL_GENERATOR_URL);
-    }
-
-    public EmailPageNavigator sendEmail() {
-       // driver.switchTo().frame(driver.findElement(By.xpath("/html/body/section/section/main/devsite-content/article/div[2]/article/devsite-iframe/iframe")));
-        driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='cloud-site']/devsite-iframe/iframe")));
-        //       driver.switchTo().frame(driver.findElement(By.xpath("/html/body/div/div/div/iframe")));
-        driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='myFrame']")));
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(buttonEmailEstimate));
-        estimatedCostOnCalculator = getCostFromText(costTextOnCalculator.getText());
-        buttonEmailEstimate.click();
-        inputFieldEmail.sendKeys(generatedEmailName);
-        buttonSendEmail.click();
-        driver.switchTo().window(windowsTabsList.get(1));
-        checkEmailButton.click();
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(refreshEmailWindowButton));
-        while (mail.getText().equals("0 mail")) {
-            refreshEmailWindowButton.click();
-        }
-        return new EmailPageNavigator(driver, estimatedCostOnCalculator, generatedEmailName);
-    }
-
-    private String getCostFromText(String text) {
-        String[] fulltext = text.split(" ");
-        return fulltext[4];
     }
 }

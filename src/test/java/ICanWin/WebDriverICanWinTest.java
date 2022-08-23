@@ -5,11 +5,11 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
-public class WebDriverTest {
+public class WebDriverICanWinTest {
     WebDriver chromeDriver= StartScenarioOnBrowser(new ChromeDriver());;
 
     private static WebDriver StartScenarioOnBrowser(WebDriver driver) {
-        new PageNavigator(driver)
+        new PastebinPage(driver)
                 .openPage()
                 .fillSiteForm()
                 .createPaste();
