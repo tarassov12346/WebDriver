@@ -2,11 +2,11 @@ package ICanWin;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 public class WebDriverTest {
-    WebDriver chromeDriver;
+    WebDriver chromeDriver= StartScenarioOnBrowser(new ChromeDriver());;
 
     private static WebDriver StartScenarioOnBrowser(WebDriver driver) {
         new PageNavigator(driver)
@@ -16,12 +16,12 @@ public class WebDriverTest {
         return driver;
     }
 
-     @Test(description = "test")
+     @Test(description = "testICanWin")
     public void scenarioTest() {
-        chromeDriver = StartScenarioOnBrowser(new ChromeDriver());
+         System.out.println(chromeDriver);
     }
 
-    @AfterMethod(alwaysRun = true)
+    @AfterTest(alwaysRun = true)
     public void afterTestCompleted() {
         driverQuit(chromeDriver);
     }

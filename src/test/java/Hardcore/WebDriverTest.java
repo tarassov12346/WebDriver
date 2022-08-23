@@ -3,10 +3,11 @@ package Hardcore;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 public class WebDriverTest {
-    WebDriver chromeDriver;
+    WebDriver chromeDriver= StartScenarioOnBrowser(new ChromeDriver());
 
     private static WebDriver StartScenarioOnBrowser(WebDriver driver) {
         new PageNavigator(driver)
@@ -20,14 +21,18 @@ public class WebDriverTest {
         return driver;
     }
 
-    @Test(description = "test")
-    public void scenarioTest() {
-        chromeDriver = StartScenarioOnBrowser(new ChromeDriver());
-        testProcedure(chromeDriver);
+    @Test(description = "testHardcore Total Estimated Monthly Cost")
+    public void totalEstimatedMonthlyCostCorresponds() {
+        Assert.assertTrue(PageTestResult.result, chromeDriver.toString() + ": FAIL: the estimated cost on calculator differs from that in Email");
     }
 
-    private void testProcedure(WebDriver driver) {
-        System.out.println("result(assert method): " + PageTestResult.result);
-        Assert.assertTrue(PageTestResult.result, driver.toString() + ": FAIL: the estimated cost on calculator differs from that in Email");
+    @AfterTest(alwaysRun = true)
+    public void afterTestCompleted() {
+        driverQuit(chromeDriver);
     }
+
+    private void driverQuit(WebDriver driver) {
+        driver.quit();
+    }
+
 }

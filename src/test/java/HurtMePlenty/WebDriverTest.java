@@ -3,10 +3,12 @@ package HurtMePlenty;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
+import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 public class WebDriverTest {
-    WebDriver chromeDriver;
+    WebDriver chromeDriver= StartScenarioOnBrowser(new ChromeDriver());
+    PageTestResult testPage = new PageTestResult(chromeDriver);
 
     private static WebDriver StartScenarioOnBrowser(WebDriver driver) {
         new PageNavigator(driver)
@@ -17,19 +19,42 @@ public class WebDriverTest {
         return driver;
     }
 
-    @Test(description = "test")
-    public void scenarioTest() {
-        chromeDriver = StartScenarioOnBrowser(new ChromeDriver());
-        testProcedure(chromeDriver);
+    @Test(description = "testHurtMePlenty VM Class Check")
+    public void vMClassCorresponds() {
+        Assert.assertTrue(testPage.checkVMClass(), chromeDriver.toString() + ": FAIL: for VM Class check");
     }
 
-    private void testProcedure(WebDriver driver) {
-        PageTestResult testPage = new PageTestResult(driver);
-        Assert.assertTrue(testPage.checkVMClass(), driver.toString() + ": FAIL: for VM Class check");
-        Assert.assertTrue(testPage.checkInstanceType(), driver.toString() + ": FAIL: for Instance Type check");
-        Assert.assertTrue(testPage.checkRegion(), driver.toString() + ": FAIL: for Region check");
-        Assert.assertTrue(testPage.checkSSD(), driver.toString() + ": FAIL: for SSD capacity check");
-        Assert.assertTrue(testPage.checkUsage(), driver.toString() + ": FAIL: for Usage term check");
-        Assert.assertTrue(testPage.checkManualResult(), driver.toString() + ": FAIL: for manual result check");
+    @Test(description = "testHurtMePlenty Instance Type Check")
+    public void instanceTypeCorresponds() {
+        Assert.assertTrue(testPage.checkInstanceType(), chromeDriver.toString() + ": FAIL: for Instance Type check");
+    }
+
+    @Test(description = "testHurtMePlenty Region Check")
+    public void regionCorresponds() {
+        Assert.assertTrue(testPage.checkRegion(), chromeDriver.toString() + ": FAIL: for Region check");
+    }
+
+    @Test(description = "testHurtMePlenty local SSD Check")
+    public void localSsdCorresponds() {
+        Assert.assertTrue(testPage.checkSSD(), chromeDriver.toString() + ": FAIL: for SSD capacity check");
+    }
+
+    @Test(description = "testHurtMePlenty commitment term Check")
+    public void commitmentTermCorresponds() {
+        Assert.assertTrue(testPage.checkUsage(), chromeDriver.toString() + ": FAIL: for Usage term check");
+    }
+
+    @Test(description = "testHurtMePlenty manual result Check")
+    public void manualResultCorresponds() {
+        Assert.assertTrue(testPage.checkManualResult(), chromeDriver.toString() + ": FAIL: for manual result check");
+    }
+
+    @AfterTest(alwaysRun = true)
+    public void afterTestCompleted() {
+        driverQuit(chromeDriver);
+    }
+
+    private void driverQuit(WebDriver driver) {
+        driver.quit();
     }
 }
