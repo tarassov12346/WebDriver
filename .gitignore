@@ -6,3 +6,4 @@ out/
 *.yml
 *.iml
 *.md
+target/

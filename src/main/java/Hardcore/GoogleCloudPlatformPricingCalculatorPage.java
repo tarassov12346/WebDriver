@@ -5,26 +5,20 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.ArrayList;
 
 public class GoogleCloudPlatformPricingCalculatorPage extends AbstractPage {
-    private static final String HOMEPAGE_URL = "https://cloud.google.com/";
-    private static final String SEARCH_REQUEST = "Google Cloud Platform Pricing Calculator";
-    private static final String EMAIL_GENERATOR_URL = "https://yopmail.com/";
-    private static final String FORM_NUMBER_OF_INSTANCE = "4";
-    private static final String FORM_OS_TYPE = "Free: Debian, CentOS, CoreOS, Ubuntu or BYOL (Bring Your Own License)";
-    private static final String FORM_CLASS_TYPE = "Regular";
-    private static final String FORM_INSTANCE_SERIES = "N1";
-    private static final String FORM_INSTANCE_TYPE = "n1-standard-8 (vCPUs: 8, RAM: 30GB)";
-    private static final String FORM_GPU_NUMBER = "1";
-    private static final String FORM_GPU_TYPE = "NVIDIA Tesla V100";
-    private static final String FORM_SSD_CAPACITY = "2x375 GB";
-    private static final String FORM_LOCATION = "Frankfurt (europe-west3)";
-    private static final String FORM_USAGE = "1 Year";
+    private static final String OS_BOX_NAME = "Operating System / Software";
+    private static final String VM_BOX_NAME = "Provisioning model";
+    private static final String SERIES_BOX_NAME = "Series";
+    private static final String MACHINE_TYPE_BOX_NAME = "Machine type";
+    private static final String GPU_TYPE_BOX_NAME = "GPU type";
+    private static final String NUMBER_OF_GPUS_BOX_NAME = "Number of GPUs";
+    private static final String LOCAL_SSD_BOX_NAME = "Local SSD";
+    private static final String DATA_CENTER_LOCATION_BOX_NAME = "Datacenter location";
+    private static final String COMMITED_USAGE_BOX_NAME = "Committed usage";
+    private final String OPTION_BOX_NAME_SELECT ="*//label[text()='%s']/../md-select";
+    private final long TIME_OUT=20;
 
-    String generatedEmailName;
-    ArrayList<String> windowsTabsList;
-    static String estimatedCostOnCalculator;
 
     @FindBy(xpath = "//*[@class='devsite-search-field devsite-search-query']")
     private WebElement searchButton;
@@ -39,110 +33,150 @@ public class GoogleCloudPlatformPricingCalculatorPage extends AbstractPage {
     private WebElement buttonAddToEstimate;
     @FindBy(xpath = "//b[@class='ng-binding']")
     private WebElement costTextOnCalculator;
-    @FindBy(xpath = "//*[@id='email_quote']")
+    @FindBy(id = "email_quote")
     private WebElement buttonEmailEstimate;
     @FindBy(xpath = "//input[@type='email']")
     private WebElement inputFieldEmail;
     @FindBy(xpath = "//button[@aria-label='Send Email']")
     private WebElement buttonSendEmail;
-    @FindBy(xpath = "//span[text()='Проверить почту']")
-    private WebElement checkEmailButton;
-    @FindBy(xpath = "//*[@id='refresh']")
-    private WebElement refreshEmailWindowButton;
-    @FindBy(xpath = "//*[@id='nbmail']")
-    private WebElement mail;
 
-    public GoogleCloudPlatformPricingCalculatorPage(WebDriver driver) {
-        super(driver);
-    }
-
-    public GoogleCloudPlatformPricingCalculatorPage(WebDriver driver, String generatedEmailName, ArrayList<String> windowsTabsList) {
-        super(driver);
-        this.generatedEmailName = generatedEmailName;
-        this.windowsTabsList = windowsTabsList;
-    }
-
-    public GoogleCloudPlatformPricingCalculatorPage openPage() {
+    @Override
+    protected  GoogleCloudPlatformPricingCalculatorPage openPage(String homePageUrl) {
         driver.manage().window().maximize();
-        driver.get(HOMEPAGE_URL);
+        driver.get(homePageUrl);
         return this;
     }
 
-    public GoogleCloudPlatformPricingCalculatorPage searchForCalculatorSiteAndClick() {
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(searchButton));
+    public GoogleCloudPlatformPricingCalculatorPage clickSearchButton(){
+        waitForElementVisibility(searchButton, TIME_OUT);
         searchButton.click();
-        searchButton.sendKeys(SEARCH_REQUEST);
-        searchButton.sendKeys(Keys.RETURN);
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(searchResultField));
-        searchResultField.findElement(By.linkText(SEARCH_REQUEST)).click();
         return this;
     }
 
-    public GoogleCloudPlatformPricingCalculatorPage fillCalculatorSiteForm() {
+    public GoogleCloudPlatformPricingCalculatorPage enterSearchRequest(String searchRequest){
+        searchButton.sendKeys(searchRequest);
+        searchButton.sendKeys(Keys.RETURN);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage loadCalculatorSite(String searchRequest){
+        waitForElementVisibility(searchResultField, TIME_OUT);
+        searchResultField.findElement(By.linkText(searchRequest)).click();
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInNumberOfInstance(String formNumberOfInstance) {
         driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='cloud-site']/devsite-iframe/iframe")));
         driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@id='myFrame']")));
-        inputFieldHandling(inputFieldNumberOfInstances, FORM_NUMBER_OF_INSTANCE);
-        spanOptionHandling("Operating System / Software", FORM_OS_TYPE);
-        spanOptionHandling("Provisioning model", FORM_CLASS_TYPE);
-        spanOptionHandling("Series", FORM_INSTANCE_SERIES);
-        spanOptionHandling("Machine type", FORM_INSTANCE_TYPE);
+        inputFieldHandling(inputFieldNumberOfInstances, formNumberOfInstance);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInOperatingSystem(String formOsType) {
+        spanOptionHandling(OS_BOX_NAME, formOsType);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInVmClass(String formClassType) {
+        spanOptionHandling(VM_BOX_NAME, formClassType);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInSeries(String formInstanceSeries) {
+        spanOptionHandling(SERIES_BOX_NAME, formInstanceSeries);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInMachineType(String formInstanceType) {
+        spanOptionHandling(MACHINE_TYPE_BOX_NAME, formInstanceType);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage checkBoxAddGpu() {
         checkBoxHandling(checkBoxAddGPUs);
-        spanOptionHandling("GPU type", FORM_GPU_TYPE);
-        spanOptionHandling("Number of GPUs", FORM_GPU_NUMBER);
-        spanOptionHandling("Local SSD", FORM_SSD_CAPACITY);
-        datacenterLocationSpanOptionHandling("Datacenter location", FORM_LOCATION);
-        spanOptionHandling("Committed usage", FORM_USAGE);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInGpuType(String formGpuType) {
+        spanOptionHandling(GPU_TYPE_BOX_NAME, formGpuType);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInNumberOfGpu(String formGpuNumber) {
+        spanOptionHandling(NUMBER_OF_GPUS_BOX_NAME, formGpuNumber);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInLocalSsd(String formSsdCapacity) {
+        spanOptionHandling(LOCAL_SSD_BOX_NAME, formSsdCapacity);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInDataCenterLocation(String formLocation) {
+        datacenterLocationSpanOptionHandling(DATA_CENTER_LOCATION_BOX_NAME, formLocation);
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage fillInCommitedUsage(String formUsage) {
+        spanOptionHandling(COMMITED_USAGE_BOX_NAME, formUsage);
         return this;
     }
 
     private void inputFieldHandling(WebElement inputField, String value) {
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(inputField));
+        waitForElementVisibility(inputField, TIME_OUT);
         inputField.sendKeys(value);
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(100));
     }
 
-    public void spanOptionHandling(String optionBoxName, String optionName) {
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("*//label[text()='" + optionBoxName + "']/../md-select")));
-        driver.findElement(By.xpath("*//label[text()='" + optionBoxName + "']/../md-select")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("*//*[@class='md-select-menu-container md-active md-clickable']//.//*[contains(text(),'" + optionName + "')]")));
-        driver.findElement(By.xpath("*//*[@class='md-select-menu-container md-active md-clickable']//.//*[contains(text(),'" + optionName + "')]")).click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(200));
+    private void waitForElementVisibility(WebElement element, long secondsToWait) {
+        new WebDriverWait(driver, Duration.ofSeconds(secondsToWait)).
+                until(ExpectedConditions.visibilityOf(element));
+    }
+
+    private void waitForPresenceOfElement(String elementPath, long secondsToWait) {
+        new WebDriverWait(driver, Duration.ofSeconds(secondsToWait)).
+                until(ExpectedConditions.presenceOfElementLocated(By.xpath(elementPath)));
+    }
+
+    private void spanOptionHandling(String optionBoxName, String optionName) {
+        waitForPresenceOfElement(String.format(OPTION_BOX_NAME_SELECT, optionBoxName), TIME_OUT);
+        driver.findElement(By.xpath(String.format(OPTION_BOX_NAME_SELECT, optionBoxName))).click();
+        String MENU_CONTAINER_SELECT = "*//*[@class='md-select-menu-container md-active md-clickable']//.//*[contains(text(),'%s')]";
+        waitForPresenceOfElement(String.format(MENU_CONTAINER_SELECT, optionName), TIME_OUT);
+        driver.findElement(By.xpath(String.format(MENU_CONTAINER_SELECT, optionName))).click();
     }
 
     private void checkBoxHandling(WebElement checkBoxField) {
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(checkBoxField));
+        waitForElementVisibility(checkBoxField, TIME_OUT);
         checkBoxField.click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(100));
     }
 
-    public void datacenterLocationSpanOptionHandling(String optionBoxName, String optionName) {
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("*//label[text()='" + optionBoxName + "']/../md-select")));
-        driver.findElement(By.xpath("*//label[text()='" + optionBoxName + "']/../md-select")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("*//*[@class='md-select-menu-container cpc-region-select md-active md-clickable']//.//*[contains(text(),'" + optionName + "')]")));
-        driver.findElement(By.xpath("*//*[@class='md-select-menu-container cpc-region-select md-active md-clickable']//.//*[contains(text(),'" + optionName + "')]")).click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(200));
+    private void datacenterLocationSpanOptionHandling(String optionBoxName, String optionName) {
+        waitForPresenceOfElement(String.format(OPTION_BOX_NAME_SELECT, optionBoxName), TIME_OUT);
+        driver.findElement(By.xpath(String.format(OPTION_BOX_NAME_SELECT, optionBoxName))).click();
+        String MENU_CONTAINER_REGION_SELECT = "*//*[@class='md-select-menu-container cpc-region-select md-active md-clickable']//.//*[contains(text(),'%s')]";
+        waitForPresenceOfElement(String.format(MENU_CONTAINER_REGION_SELECT, optionName), TIME_OUT);
+        driver.findElement(By.xpath(String.format(MENU_CONTAINER_REGION_SELECT, optionName))).click();
     }
 
-    public EmailHandlingPage createEstimatedCostRequest() {
+    public GoogleCloudPlatformPricingCalculatorPage addToEstimate() {
         buttonAddToEstimate.click();
-        return new EmailHandlingPage(driver, EMAIL_GENERATOR_URL);
+        return this;
     }
 
-    public EmailHandlingPage sendEmail() {
-        driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='cloud-site']/devsite-iframe/iframe")));
-        driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='myFrame']")));
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(buttonEmailEstimate));
-        estimatedCostOnCalculator = getCostFromText(costTextOnCalculator.getText());
+    public String getVmEstimatedMonthlyCostValueOnCalculator(){
+        return getCostFromText(costTextOnCalculator.getText());
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage clickEmailButton(){
+        waitForElementVisibility(buttonEmailEstimate,TIME_OUT);
         buttonEmailEstimate.click();
+        return this;
+    }
+
+    public GoogleCloudPlatformPricingCalculatorPage inputGeneratedEmailName(String generatedEmailName){
         inputFieldEmail.sendKeys(generatedEmailName);
         buttonSendEmail.click();
-        driver.switchTo().window(windowsTabsList.get(1));
-        checkEmailButton.click();
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.elementToBeClickable(refreshEmailWindowButton));
-        while (mail.getText().equals("0 mail")) {
-            refreshEmailWindowButton.click();
-        }
-        return new EmailHandlingPage(driver,generatedEmailName);
+        return this;
     }
 
     private String getCostFromText(String text) {

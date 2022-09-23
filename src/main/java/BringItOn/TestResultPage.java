@@ -1,17 +1,21 @@
 package BringItOn;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
+import java.util.StringJoiner;
 
 public class TestResultPage extends AbstractPage{
     private Boolean result;
 
-    @FindBy(xpath = "//*[@class='textarea -raw js-paste-raw']")
-    private WebElement codeTextInResultForm;
+    //@FindBy(xpath = "//*[@class='textarea -raw js-paste-raw']")
+    //private WebElement codeTextInResultForm;
+
     @FindBy(xpath = "//a[@href='/archive/bash']")
     private WebElement syntaxHighlightInResultForm;
     @FindBy(xpath = "//div[@class='info-top']/h1")
@@ -22,8 +26,11 @@ public class TestResultPage extends AbstractPage{
     }
 
     public Boolean checkCodeText() {
-        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOf(codeTextInResultForm));
-        checkResult(codeTextInResultForm.getAttribute("value"), PastebinPage.getCodeFieldText());
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@class='de1']")));
+        List<WebElement> codeTextInResultFormList= driver.findElements(By.xpath("//div[@class='de1']"));
+        StringJoiner codeTextInResultFormJoiner = new StringJoiner("\n");
+        codeTextInResultFormList.stream().forEach(webElement -> codeTextInResultFormJoiner.add(webElement.getText()));
+        checkResult(codeTextInResultFormJoiner.toString(), PastebinPage.getCodeFieldText());
         return result;
     }
 

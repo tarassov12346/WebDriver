@@ -2,11 +2,13 @@ package ICanWin;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
 public class WebDriverICanWinTest {
-    WebDriver chromeDriver= StartScenarioOnBrowser(new ChromeDriver());;
+    WebDriver chromeDriver = StartScenarioOnBrowser(new ChromeDriver());
+    ;
 
     private static WebDriver StartScenarioOnBrowser(WebDriver driver) {
         new PastebinPage(driver)
@@ -16,17 +18,17 @@ public class WebDriverICanWinTest {
         return driver;
     }
 
-     @Test(description = "testICanWin")
+    @Test(description = "testICanWin")
     public void scenarioTest() {
-         System.out.println(chromeDriver);
+        System.out.println(chromeDriver);
     }
 
-    @AfterTest(alwaysRun = true)
+    @AfterClass()
     public void afterTestCompleted() {
         driverQuit(chromeDriver);
     }
 
     private void driverQuit(WebDriver driver) {
-        driver.quit();
+        driver.close();
     }
 }
