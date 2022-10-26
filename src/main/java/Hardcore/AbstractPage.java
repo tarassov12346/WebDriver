@@ -9,8 +9,10 @@ public abstract class AbstractPage {
     protected WebDriver driver;
 
     public AbstractPage() {
-        WebDriverManager.chromedriver().setup();
-        WebDriver driver = new ChromeDriver();
+       WebDriverManager.chromedriver().setup();
+       WebDriver driver = new ChromeDriver();
+
+
         this.driver = driver;
         PageFactory.initElements(driver, this);
     }

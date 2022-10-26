@@ -1,9 +1,11 @@
 package HurtMePlenty;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 
 
@@ -75,21 +77,61 @@ public class GoogleCloudPlatformPricingCalculatorPage extends AbstractPage {
     }
 
     public GoogleCloudPlatformPricingCalculatorPage fillCalculatorSiteForm() {
+
+
+
         driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='cloud-site']/devsite-iframe/iframe")));
         driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@id='myFrame']")));
         inputFieldHandling(inputFieldNumberOfInstances, FORM_NUMBER_OF_INSTANCE);
         spanOptionHandling("Operating System / Software", FORM_OS_TYPE);
+
+
+
         spanOptionHandling("Provisioning model", FORM_CLASS_TYPE);
+
+        scrollDownToMiddle("Operating System / Software");
+
+
+//        new Actions(driver).sendKeys(Keys.PAGE_DOWN).perform();
+//        new Actions(driver).sendKeys(Keys.ARROW_UP).sendKeys(Keys.ARROW_UP).sendKeys(Keys.ARROW_UP).perform();
+
         spanOptionHandling("Series", FORM_INSTANCE_SERIES);
+
+
+
+
+
+
+
+//
+
+
+
+
         spanOptionHandling("Machine type", FORM_INSTANCE_TYPE);
         checkBoxHandling(checkBoxAddGPUs);
+
+
+
         spanOptionHandling("GPU type", FORM_GPU_TYPE);
         spanOptionHandling("Number of GPUs", FORM_GPU_NUMBER);
+
+        scrollDownToMiddle("GPU type");
+
+ //       new Actions(driver).sendKeys(Keys.PAGE_DOWN).perform();
+
         spanOptionHandling("Local SSD", FORM_SSD_CAPACITY);
         datacenterLocationSpanOptionHandling("Datacenter location", FORM_LOCATION);
         spanOptionHandling("Committed usage", FORM_USAGE);
         return this;
     }
+
+    private void scrollDownToMiddle(String optionBoxName) {
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);",
+                driver.findElement(By.xpath("*//label[text()='" + optionBoxName + "']/../md-select")));
+
+    }
+
 
     private void inputFieldHandling(WebElement inputField, String value) {
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(inputField));
@@ -98,14 +140,19 @@ public class GoogleCloudPlatformPricingCalculatorPage extends AbstractPage {
     }
 
     public void spanOptionHandling(String optionBoxName, String optionName) {
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("*//label[text()='" + optionBoxName + "']/../md-select")));
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("*//label[text()='" + optionBoxName + "']/../md-select")));
+
+
         driver.findElement(By.xpath("*//label[text()='" + optionBoxName + "']/../md-select")).click();
-        new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("*//*[@class='md-select-menu-container md-active md-clickable']//.//*[contains(text(),'" + optionName + "')]")));
+
+        new WebDriverWait(driver, Duration.ofSeconds(20)).until(ExpectedConditions.presenceOfElementLocated(By.xpath("*//*[@class='md-select-menu-container md-active md-clickable']//.//*[contains(text(),'" + optionName + "')]")));
+
         driver.findElement(By.xpath("*//*[@class='md-select-menu-container md-active md-clickable']//.//*[contains(text(),'" + optionName + "')]")).click();
-        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(200));
+//        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(200));
     }
 
     private void checkBoxHandling(WebElement checkBoxField) {
+
         new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions.visibilityOf(checkBoxField));
         checkBoxField.click();
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(100));
