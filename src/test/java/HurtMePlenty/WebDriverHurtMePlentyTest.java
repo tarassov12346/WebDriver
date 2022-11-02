@@ -16,7 +16,7 @@ import org.testng.annotations.Test;
 
 public class WebDriverHurtMePlentyTest {
 
-    WebDriver chromeDriver= StartScenarioOnBrowser(new FirefoxDriver());
+    WebDriver chromeDriver= StartScenarioOnBrowser(new ChromeDriver());
 
 
     TestResultPage testPage = new TestResultPage(chromeDriver);

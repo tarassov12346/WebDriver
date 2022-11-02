@@ -77,49 +77,21 @@ public class GoogleCloudPlatformPricingCalculatorPage extends AbstractPage {
     }
 
     public GoogleCloudPlatformPricingCalculatorPage fillCalculatorSiteForm() {
-
-
-
         driver.switchTo().frame(driver.findElement(By.xpath("//*[@id='cloud-site']/devsite-iframe/iframe")));
         driver.switchTo().frame(driver.findElement(By.xpath("//iframe[@id='myFrame']")));
         inputFieldHandling(inputFieldNumberOfInstances, FORM_NUMBER_OF_INSTANCE);
         spanOptionHandling("Operating System / Software", FORM_OS_TYPE);
-
-
-
         spanOptionHandling("Provisioning model", FORM_CLASS_TYPE);
-
         scrollDownToMiddle("Operating System / Software");
-
-
 //        new Actions(driver).sendKeys(Keys.PAGE_DOWN).perform();
 //        new Actions(driver).sendKeys(Keys.ARROW_UP).sendKeys(Keys.ARROW_UP).sendKeys(Keys.ARROW_UP).perform();
-
         spanOptionHandling("Series", FORM_INSTANCE_SERIES);
-
-
-
-
-
-
-
-//
-
-
-
-
         spanOptionHandling("Machine type", FORM_INSTANCE_TYPE);
         checkBoxHandling(checkBoxAddGPUs);
-
-
-
         spanOptionHandling("GPU type", FORM_GPU_TYPE);
         spanOptionHandling("Number of GPUs", FORM_GPU_NUMBER);
-
         scrollDownToMiddle("GPU type");
-
  //       new Actions(driver).sendKeys(Keys.PAGE_DOWN).perform();
-
         spanOptionHandling("Local SSD", FORM_SSD_CAPACITY);
         datacenterLocationSpanOptionHandling("Datacenter location", FORM_LOCATION);
         spanOptionHandling("Committed usage", FORM_USAGE);
